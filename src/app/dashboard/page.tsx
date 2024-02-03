@@ -20,6 +20,7 @@ export default function page() {
       >
         Logout
       </Button>
+      <h1>default</h1>
     </div>
   );
 }
