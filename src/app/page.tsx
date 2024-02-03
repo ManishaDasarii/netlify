@@ -15,7 +15,7 @@ function Page() {
   const [errors, setErrors] = useState<any>({ email: "", password: "" });
   const [msg, setMessage] = useState("");
 
-  const handleSubmit = async (e?: any) => {
+  const handleSubmit = async (e: any) => {
     setErrors({});
     setMessage("");
     e.preventDefault();
@@ -79,7 +79,6 @@ function Page() {
       <Button variant="contained" size="small" onClick={handleSubmit}>
         submit
       </Button>
-      <h1>out</h1>
       <br></br>
     </div>
   );

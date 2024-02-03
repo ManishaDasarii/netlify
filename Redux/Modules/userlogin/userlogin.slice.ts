@@ -18,7 +18,7 @@ export const initialState: IReduxUserLogin.IInitialLoginState = {
 
 export const userLoginSlice = createSlice({
   name: reducerName,
-  initialState,
+  initialState,       
   reducers: {
    adduserDetails:(state:any,action:any)=>{
       state.userDetails = action.payload;
@@ -26,5 +26,7 @@ export const userLoginSlice = createSlice({
   },
 });
 
+
 export const { adduserDetails } = userLoginSlice.actions;
+
 export const userLoginSliceReducer = { [reducerName]: userLoginSlice.reducer };
