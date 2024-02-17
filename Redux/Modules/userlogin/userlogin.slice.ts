@@ -13,7 +13,7 @@ export const initialState: IReduxUserLogin.IInitialLoginState = {
     scope: "",
     access_token: "",
     token_type: "",
-    // fhngnhjgkmhkhk
+    
   },
 };
 
