@@ -6,7 +6,7 @@ function Home() {
 
   return (
     <div>
-      <h2>home page</h2>
+      <h2>home</h2>
       <Button
         variant="contained"
         size="small"
@@ -17,7 +17,7 @@ function Home() {
       <Button variant="contained" size="small">
         Logout
       </Button>
-      <br></br>
+
       <Button onClick={() => router.back()}>Back</Button>
     </div>
   );

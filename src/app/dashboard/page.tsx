@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import Button from "@mui/material/Button";
-import { Select, MenuItem } from "@mui/material";
+import { Select, MenuItem, Backdrop, CircularProgress } from "@mui/material";
 import Stack from "@mui/material/Stack";
 import Pagination from "@mui/material/Pagination";
 import { useState, useEffect } from "react";
@@ -19,13 +19,20 @@ export default function page() {
   const router = useRouter();
 
   const [data, setData] = useState<any>();
-  const [loading, setLoading] = useState("");
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
+  const [currentpage, setCurrentPage] = useState(1);
+
+  const [totalpage, setTotalPage] = useState(10);
+  const [paginationlimit, setPaginationLimit] = useState(20);
   const accessToken = useSelector(
     (state: any) => state.userLogin.userDetails.access_token
   );
+
+  const [paginationDetails, setPaginationDetails] = useState<any>({});
   // console.log(accessToken);
-  const GetFarms = async () => {
+  const getAllFarms = async (page: number | string, limit: number | string) => {
+    setLoading(true);
     let options = {
       method: "GET",
       headers: new Headers({
@@ -34,28 +41,40 @@ export default function page() {
     };
     try {
       const varName = `${process.env.NEXT_PUBLIC_API_URL}`;
-      const endpoint = "/farms/1/20";
+      const endpoint = `/farms/${page}/${limit}`;
 
       const result = `${varName}${endpoint}`;
-      console.log(result);
-
       const response = await fetch(result, options);
       console.log(response);
 
       const responseData = await response.json();
+      const { data, ...rest } = responseData;
       console.log(responseData);
 
       if (responseData.success) {
-        setData(responseData.data);
+        setData(data);
+        setPaginationDetails(rest);
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
+  const handleOnPageChange = (_: any, value: number) => {
+    +console.log(value);
+    getAllFarms(value, 20);
+  };
+
+  const handlePaginationMenuChange = (event: any) => {
+    // setPaginationLimit(event.target.value);
+    console.log(event.target.value);
+    getAllFarms(1, event.target.value);
+  };
   useEffect(() => {
     if (accessToken) {
-      GetFarms();
+      getAllFarms(1, 10);
     }
   }, [accessToken]);
 
@@ -84,23 +103,38 @@ export default function page() {
               </TableRow>
             ))}
           </TableBody>
-          <Select
-            sx={{
-              width: 50,
-              height: 50,
-            }}
-          >
-            <MenuItem value={1}>5</MenuItem>
-            <MenuItem value={2}>10</MenuItem>
-            <MenuItem value={3}>15</MenuItem>
-            <MenuItem value={3}>20</MenuItem>
-          </Select>
-          <br></br>
-          <Stack spacing={2}>
-            <Pagination count={10} color="primary" />
-          </Stack>
         </Table>
       </TableContainer>
+
+      <Select
+        value={paginationDetails?.limit ? paginationDetails?.limit : 10}
+        onChange={handlePaginationMenuChange}
+        sx={{
+          width: 50,
+          height: 50,
+        }}
+      >
+        <MenuItem value={5}>5</MenuItem>
+        <MenuItem value={10}>10</MenuItem>
+        <MenuItem value={15}>15</MenuItem>
+        <MenuItem value={20}>20</MenuItem>
+      </Select>
+
+      <br></br>
+      <Stack spacing={2}>
+        {!loading ? (
+          <Pagination
+            count={paginationDetails?.total_pages}
+            page={paginationDetails?.page}
+            onChange={handleOnPageChange}
+          />
+        ) : (
+          ""
+        )}
+      </Stack>
+      <Backdrop open={loading}>
+        <CircularProgress sx={{ color: "white" }} />
+      </Backdrop>
     </div>
   );
 }

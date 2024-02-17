@@ -42,10 +42,10 @@ function Profile() {
   useEffect(() => {
     if (accessToken) getProfile();
   }, [accessToken]);
-return(
-  <div className="App">
-    <h1>My profile</h1>
- </div>)
- 
+  return (
+    <div className="App">
+      <h1>My profile</h1>
+    </div>
+  );
 }
 export default Profile;
