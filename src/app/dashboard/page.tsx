@@ -63,12 +63,11 @@ export default function page() {
   };
 
   const handleOnPageChange = (_: any, value: number) => {
-    +console.log(value);
+    console.log(value);
     getAllFarms(value, 20);
   };
 
   const handlePaginationMenuChange = (event: any) => {
-    // setPaginationLimit(event.target.value);
     console.log(event.target.value);
     getAllFarms(1, event.target.value);
   };
